@@ -82,3 +82,56 @@ Active Development
 
 ---
 
+## Application Screenshots
+
+### Dashboard
+
+![Dashboard](assets/screenshots/dashboard.png)
+
+### Analytics
+
+![Analytics](assets/screenshots/analytics.png)
+
+### Appointment Management
+
+![Appointment](assets/screenshots/appointment.png)
+
+### Barber Management
+
+![Barber](assets/screenshots/barber.png)
+
+### Billing System
+
+![Billing](assets/screenshots/billing.png)
+
+### Customer CRM
+
+![CRM](assets/screenshots/crm.png)
+
+### Employee Management
+
+![Employee](assets/screenshots/employee.png)
+
+### Expense Management
+
+![Expenses](assets/screenshots/expenses.png)
+
+### Inventory Management
+
+![Inventory](assets/screenshots/inventory.png)
+
+### Salon Settings
+
+![Settings](assets/screenshots/salon-setting.png)
+
+### Smart Token System
+
+![Token System](assets/screenshots/token.png)
+
+### TV Display Screen
+
+![TV Display](assets/screenshots/tv-screen.png)
+
+### WhatsApp & SMS Integration
+
+![WhatsApp Integration](assets/screenshots/whatsapp-sms-integration.png)
