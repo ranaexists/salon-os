@@ -9,6 +9,15 @@ The project was inspired by workflow inefficiencies commonly observed in local m
 The objective was to design a centralized system that improves operational efficiency and customer experience through automation and real-time visibility.
 
 ---
+## Why I Built This Project
+
+This project was created as an attempt to understand and solve operational challenges that are commonly seen in local salon businesses.
+
+While observing salon workflows, I noticed that many day-to-day activities such as customer queue management, barber assignment, billing, customer history tracking and business reporting were often handled manually.
+
+I wanted to explore how a centralized software solution could improve efficiency, reduce waiting time, improve customer experience and provide business insights for salon owners.
+
+The result was the SALEEM Luxury Salon Management Ecosystem - a complete salon operations platform that combines customer management, CRM, billing, analytics, employee management and queue automation into a single system.
 
 ## Problem Statement
 
