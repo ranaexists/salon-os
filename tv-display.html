@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SALEEM — TV Display</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tv-display.css">
+</head>
+<body>
+  <!-- Background Particles -->
+  <div class="bg-particles" id="bg-particles"></div>
+  <div class="gold-line top"></div>
+  <div class="gold-line bottom"></div>
+
+  <!-- Header -->
+  <header class="tv-header">
+    <div class="tv-logo">
+      <span class="tv-logo-s">S</span>
+      <div class="tv-logo-text">
+        <span class="tv-brand">SALEEM</span>
+        <span class="tv-tagline">Executive Grooming Lounge</span>
+      </div>
+    </div>
+    <div class="tv-datetime">
+      <div class="tv-time" id="tv-time">00:00:00</div>
+      <div class="tv-date" id="tv-date">Monday, 01 January 2025</div>
+    </div>
+  </header>
+
+  <!-- Main Display -->
+  <div class="tv-main">
+    <!-- Now Serving -->
+    <div class="now-serving-section">
+      <div class="now-serving-label">NOW SERVING</div>
+      <div class="now-serving-cards" id="now-serving-cards">
+        <div class="serving-empty">
+          <div class="empty-scissors">✂</div>
+          <p>Welcoming Our Esteemed Guests</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Queue -->
+    <div class="tv-queue-section">
+      <div class="queue-label">UPCOMING GUESTS</div>
+      <div class="tv-queue-list" id="tv-queue-list">
+        <div class="tv-queue-empty">Queue is empty</div>
+      </div>
+      <div class="tv-queue-counter">
+        <div class="counter-item">
+          <span id="tv-waiting-count">0</span>
+          <label>Waiting</label>
+        </div>
+        <div class="counter-divider"></div>
+        <div class="counter-item">
+          <span id="tv-active-count">0</span>
+          <label>Being Served</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="tv-footer">
+    <div class="tv-marquee">
+      <div class="marquee-text" id="marquee-text">
+        Welcome to SALEEM Luxury Salon &nbsp;•&nbsp; Premium Grooming Experience &nbsp;•&nbsp; Please wait for your token to be called &nbsp;•&nbsp; Thank you for your patience &nbsp;•&nbsp;
+      </div>
+    </div>
+  </footer>
+
+  <script src="tv-display.js"></script>
+</body>
+</html>

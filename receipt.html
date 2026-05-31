@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SALEEM — Receipt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 2rem;
+      font-family: 'Inter', sans-serif;
+      color: #f5f5f5;
+    }
+    .receipt-controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-gold { background: linear-gradient(135deg, #d4af37, #f5d76e); color: #0f0f0f; }
+    .btn-outline { background: transparent; border: 1px solid #d4af37; color: #d4af37; }
+
+    .receipt-paper {
+      width: 380px;
+      background: #fff;
+      color: #1a1a1a;
+      padding: 2rem;
+      border-radius: 4px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .receipt-header { text-align: center; margin-bottom: 1.5rem; }
+    .receipt-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0f0f0f;
+      letter-spacing: 4px;
+    }
+    .receipt-tagline {
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      color: #888;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .receipt-gold-line {
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #d4af37, transparent);
+      margin: 1rem 0;
+    }
+    .receipt-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+    }
+    .receipt-info-item { display: flex; flex-direction: column; }
+    .receipt-info-label { color: #888; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; }
+    .receipt-info-value { font-weight: 600; color: #1a1a1a; margin-top: 2px; }
+    .receipt-divider { border: none; border-top: 1px dashed #ccc; margin: 1rem 0; }
+    .services-table { width: 100%; font-size: 0.85rem; }
+    .services-table th {
+      text-align: left;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    .services-table td {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #f0f0f0;
+      color: #1a1a1a;
+    }
+    .services-table td:last-child { text-align: right; font-weight: 600; }
+    .totals-section { margin-top: 1rem; }
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      padding: 0.3rem 0;
+    }
+    .total-row.final {
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding-top: 0.7rem;
+      border-top: 2px solid #1a1a1a;
+      margin-top: 0.5rem;
+      color: #1a1a1a;
+    }
+    .total-row.discount { color: #e74c3c; }
+    .receipt-payment {
+      text-align: center;
+      margin-top: 1.5rem;
+      padding: 0.75rem;
+      background: #f9f9f9;
+      border-radius: 6px;
+    }
+    .payment-mode-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: #888; }
+    .payment-mode-value { font-size: 1.1rem; font-weight: 700; color: #1a1a1a; margin-top: 4px; }
+    .receipt-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+    .thank-you {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: #1a1a1a;
+      margin-bottom: 0.5rem;
+    }
+    .receipt-footer-sub { font-size: 0.7rem; color: #888; line-height: 1.6; }
+    .membership-badge {
+      display: inline-block;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin: 0.5rem 0;
+    }
+    .badge-gold { background: linear-gradient(135deg, #d4af37, #f5d76e); color: #1a1a1a; }
+    .badge-silver { background: linear-gradient(135deg, #aaa, #ddd); color: #1a1a1a; }
+    .badge-platinum { background: linear-gradient(135deg, #667, #99a); color: #fff; }
+    .badge-vip { background: linear-gradient(135deg, #8B0000, #cc0000); color: #fff; }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .receipt-controls { display: none; }
+      .receipt-paper { box-shadow: none; width: 100%; max-width: 380px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="receipt-controls">
+    <button class="btn btn-gold" onclick="window.print()">🖨 Print Receipt</button>
+    <button class="btn btn-outline" onclick="downloadPDF()">⬇ Download PDF</button>
+    <button class="btn btn-outline" onclick="window.close()">✕ Close</button>
+  </div>
+
+  <div class="receipt-paper" id="receipt-paper">
+    <div class="receipt-header">
+      <div class="receipt-brand">SALEEM</div>
+      <div class="receipt-tagline">Executive Grooming Lounge</div>
+    </div>
+    <div class="receipt-gold-line"></div>
+    <div class="receipt-info-grid">
+      <div class="receipt-info-item">
+        <span class="receipt-info-label">Customer</span>
+        <span class="receipt-info-value" id="r-name">—</span>
+      </div>
+      <div class="receipt-info-item">
+        <span class="receipt-info-label">Token</span>
+        <span class="receipt-info-value" id="r-token">—</span>
+      </div>
+      <div class="receipt-info-item">
+        <span class="receipt-info-label">Phone</span>
+        <span class="receipt-info-value" id="r-phone">—</span>
+      </div>
+      <div class="receipt-info-item">
+        <span class="receipt-info-label">Barber</span>
+        <span class="receipt-info-value" id="r-barber">—</span>
+      </div>
+      <div class="receipt-info-item">
+        <span class="receipt-info-label">Date</span>
+        <span class="receipt-info-value" id="r-date">—</span>
+      </div>
+      <div class="receipt-info-item">
+        <span class="receipt-info-label">Invoice #</span>
+        <span class="receipt-info-value" id="r-invoice">—</span>
+      </div>
+    </div>
+    <div id="r-membership-badge"></div>
+    <hr class="receipt-divider">
+    <table class="services-table">
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody id="r-services"></tbody>
+    </table>
+    <div class="totals-section">
+      <div class="total-row"><span>Subtotal</span><span id="r-subtotal">₹0</span></div>
+      <div class="total-row discount" id="r-disc-row" style="display:none"><span>Discount</span><span id="r-discount">-₹0</span></div>
+      <div class="total-row" id="r-gst-row" style="display:none"><span>GST (18%)</span><span id="r-gst">₹0</span></div>
+      <div class="total-row" id="r-tips-row" style="display:none"><span>Tips</span><span id="r-tips">₹0</span></div>
+      <div class="total-row final"><span>TOTAL</span><span id="r-total">₹0</span></div>
+    </div>
+    <div class="receipt-payment">
+      <div class="payment-mode-label">Payment Mode</div>
+      <div class="payment-mode-value" id="r-payment-mode">—</div>
+    </div>
+    <div class="receipt-gold-line"></div>
+    <div class="receipt-footer">
+      <div class="thank-you">Thank You for Your Visit</div>
+      <div class="receipt-footer-sub" id="r-salon-info">
+        SALEEM Executive Grooming Lounge<br>
+        Visit us again soon
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function loadReceipt() {
+      const data = JSON.parse(localStorage.getItem('saleem_current_receipt') || '{}');
+      const settings = JSON.parse(localStorage.getItem('saleem_settings') || '{}');
+      if (!data.customerName) return;
+
+      document.getElementById('r-name').textContent = data.customerName || '—';
+      document.getElementById('r-token').textContent = data.token || '—';
+      document.getElementById('r-phone').textContent = data.phone || '—';
+      document.getElementById('r-barber').textContent = data.barberName || '—';
+      document.getElementById('r-date').textContent = new Date().toLocaleDateString('en-IN', {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+      document.getElementById('r-invoice').textContent = data.invoiceNo || '—';
+
+      const membBadgeEl = document.getElementById('r-membership-badge');
+      if (data.membership) {
+        const cls = {Silver:'badge-silver',Gold:'badge-gold',Platinum:'badge-platinum',VIP:'badge-vip'}[data.membership] || 'badge-gold';
+        membBadgeEl.innerHTML = `<span class="membership-badge ${cls}">${data.membership} Member</span>`;
+      }
+
+      const tbody = document.getElementById('r-services');
+      let subtotal = 0;
+      (data.services || []).forEach(s => {
+        const lineTotal = s.qty * s.price;
+        subtotal += lineTotal;
+        tbody.innerHTML += `<tr><td>${s.name}</td><td>${s.qty}</td><td>₹${s.price}</td><td>₹${lineTotal}</td></tr>`;
+      });
+
+      document.getElementById('r-subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+
+      if (data.discount > 0) {
+        document.getElementById('r-disc-row').style.display = 'flex';
+        document.getElementById('r-discount').textContent = `-₹${data.discount.toFixed(2)}`;
+      }
+      if (data.gst > 0) {
+        document.getElementById('r-gst-row').style.display = 'flex';
+        document.getElementById('r-gst').textContent = `₹${data.gst.toFixed(2)}`;
+      }
+      if (data.tips > 0) {
+        document.getElementById('r-tips-row').style.display = 'flex';
+        document.getElementById('r-tips').textContent = `₹${data.tips.toFixed(2)}`;
+      }
+
+      document.getElementById('r-total').textContent = `₹${(data.total || 0).toFixed(2)}`;
+      document.getElementById('r-payment-mode').textContent = data.paymentMode || '—';
+
+      const salonName = settings.name || 'SALEEM Executive Grooming Lounge';
+      const salonAddr = settings.address || '';
+      const salonPhone = settings.phone || '';
+      document.getElementById('r-salon-info').innerHTML =
+        `${salonName}<br>${salonAddr}${salonPhone ? '<br>' + salonPhone : ''}<br>Visit us again soon`;
+    }
+
+    function downloadPDF() {
+      window.print();
+    }
+
+    loadReceipt();
+  </script>
+</body>
+</html>

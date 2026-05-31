@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SALEEM — Luxury Salon Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-logo">
+        <div class="brand-icon">S</div>
+        <div class="brand-text">
+          <span class="brand-name">SALEEM</span>
+          <span class="brand-sub">Luxury Salon</span>
+        </div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">MAIN</div>
+      <a class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
+        <span class="nav-icon">◈</span><span>Dashboard</span>
+      </a>
+      <a class="nav-item" data-page="queue" onclick="navigate('queue')">
+        <span class="nav-icon">⬡</span><span>Queue & Tokens</span>
+        <span class="nav-badge" id="queue-badge">0</span>
+      </a>
+      <a class="nav-item" data-page="active" onclick="navigate('active')">
+        <span class="nav-icon">◉</span><span>Active Customers</span>
+        <span class="nav-badge active-badge" id="active-badge">0</span>
+      </a>
+      <a class="nav-item" data-page="barbers" onclick="navigate('barbers')">
+        <span class="nav-icon">✦</span><span>Barbers</span>
+      </a>
+      <div class="nav-section-label">BUSINESS</div>
+      <a class="nav-item" data-page="billing" onclick="navigate('billing')">
+        <span class="nav-icon">◎</span><span>Billing</span>
+      </a>
+      <a class="nav-item" data-page="crm" onclick="navigate('crm')">
+        <span class="nav-icon">⬢</span><span>Customer CRM</span>
+      </a>
+      <a class="nav-item" data-page="appointments" onclick="navigate('appointments')">
+        <span class="nav-icon">◆</span><span>Appointments</span>
+      </a>
+      <a class="nav-item" data-page="analytics" onclick="navigate('analytics')">
+        <span class="nav-icon">▲</span><span>Analytics</span>
+      </a>
+      <div class="nav-section-label">OPERATIONS</div>
+      <a class="nav-item" data-page="inventory" onclick="navigate('inventory')">
+        <span class="nav-icon">▣</span><span>Inventory</span>
+      </a>
+      <a class="nav-item" data-page="expenses" onclick="navigate('expenses')">
+        <span class="nav-icon">◇</span><span>Expenses</span>
+      </a>
+      <a class="nav-item" data-page="employees" onclick="navigate('employees')">
+        <span class="nav-icon">⬟</span><span>Employees</span>
+      </a>
+      <div class="nav-section-label">SYSTEM</div>
+      <a class="nav-item" onclick="window.open('tv-display.html','_blank')">
+        <span class="nav-icon">▤</span><span>TV Display</span>
+        <span class="nav-ext">↗</span>
+      </a>
+      <a class="nav-item" data-page="settings" onclick="navigate('settings')">
+        <span class="nav-icon">◈</span><span>Settings</span>
+      </a>
+      <a class="nav-item" data-page="backup" onclick="navigate('backup')">
+        <span class="nav-icon">▦</span><span>Backup & Restore</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="salon-time" id="sidebar-time"></div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        <div class="page-title" id="page-title">Dashboard</div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <span class="search-icon">⌕</span>
+          <input type="text" placeholder="Search customers, tokens..." id="global-search" oninput="globalSearch(this.value)">
+        </div>
+        <div class="notification-btn" onclick="toggleNotifications()">
+          <span>🔔</span>
+          <span class="notif-dot" id="notif-dot"></span>
+        </div>
+        <div class="topbar-salon-name" id="topbar-salon-name">SALEEM</div>
+      </div>
+    </header>
+
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notification-panel">
+      <div class="notif-header">Notifications <button onclick="clearNotifications()">Clear All</button></div>
+      <div id="notif-list"></div>
+    </div>
+
+    <!-- Search Results -->
+    <div class="search-results" id="search-results"></div>
+
+    <!-- Pages -->
+    <div class="page-content">
+
+      <!-- DASHBOARD -->
+      <div class="page" id="page-dashboard">
+        <div class="page-header">
+          <h1>Today's Overview</h1>
+          <div class="page-actions">
+            <button class="btn-gold" onclick="navigate('queue')">+ Add Customer</button>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card gold">
+            <div class="stat-icon">₹</div>
+            <div class="stat-info">
+              <div class="stat-value" id="dash-revenue">₹0</div>
+              <div class="stat-label">Today's Revenue</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-info">
+              <div class="stat-value" id="dash-customers">0</div>
+              <div class="stat-label">Customers Today</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-info">
+              <div class="stat-value" id="dash-waiting">0</div>
+              <div class="stat-label">Waiting</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">✂</div>
+            <div class="stat-info">
+              <div class="stat-value" id="dash-active">0</div>
+              <div class="stat-label">Active</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">✓</div>
+            <div class="stat-info">
+              <div class="stat-value" id="dash-completed">0</div>
+              <div class="stat-label">Completed</div>
+            </div>
+          </div>
+          <div class="stat-card gold-outline">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-info">
+              <div class="stat-value" id="dash-top-barber">—</div>
+              <div class="stat-label">Top Barber</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-info">
+              <div class="stat-value" id="dash-available">0</div>
+              <div class="stat-label">Available Barbers</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⏱</div>
+            <div class="stat-info">
+              <div class="stat-value" id="dash-avg-time">—</div>
+              <div class="stat-label">Avg Service Time</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Customers Quick View -->
+        <div class="section-card">
+          <div class="section-header">
+            <h2>Active Customers</h2>
+            <button class="btn-sm" onclick="navigate('active')">View All</button>
+          </div>
+          <div id="dash-active-list" class="active-mini-list"></div>
+        </div>
+
+        <!-- Revenue Chart -->
+        <div class="dashboard-grid-2">
+          <div class="section-card">
+            <div class="section-header"><h2>Weekly Revenue</h2></div>
+            <div class="chart-container">
+              <canvas id="weekly-chart" width="400" height="200"></canvas>
+            </div>
+          </div>
+          <div class="section-card">
+            <div class="section-header"><h2>Top Services</h2></div>
+            <div id="top-services-list" class="top-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUEUE & TOKENS -->
+      <div class="page hidden" id="page-queue">
+        <div class="page-header">
+          <h1>Queue & Token Management</h1>
+          <div class="page-actions">
+            <button class="btn-gold" onclick="openAddCustomerModal()">+ New Token</button>
+            <button class="btn-outline" onclick="openVIPModal()">⭐ VIP Token</button>
+          </div>
+        </div>
+        <div class="queue-stats-bar">
+          <div class="q-stat"><span id="q-total">0</span><label>Total</label></div>
+          <div class="q-stat"><span id="q-waiting">0</span><label>Waiting</label></div>
+          <div class="q-stat"><span id="q-active">0</span><label>Active</label></div>
+          <div class="q-stat"><span id="q-completed">0</span><label>Completed</label></div>
+        </div>
+        <div class="queue-filters">
+          <input type="text" placeholder="Search token, name, phone..." id="queue-search" oninput="filterQueue()">
+          <select id="queue-filter-status" onchange="filterQueue()">
+            <option value="all">All Status</option>
+            <option value="waiting">Waiting</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
+          <select id="queue-filter-type" onchange="filterQueue()">
+            <option value="all">All Types</option>
+            <option value="walkin">Walk-in</option>
+            <option value="returning">Returning</option>
+            <option value="vip">VIP</option>
+          </select>
+        </div>
+        <div class="queue-list" id="queue-list"></div>
+      </div>
+
+      <!-- ACTIVE CUSTOMERS -->
+      <div class="page hidden" id="page-active">
+        <div class="page-header">
+          <h1>Active Customers</h1>
+        </div>
+        <div class="active-grid" id="active-grid"></div>
+        <div class="empty-state" id="active-empty">
+          <div class="empty-icon">✂</div>
+          <p>No active customers right now</p>
+        </div>
+      </div>
+
+      <!-- BARBERS -->
+      <div class="page hidden" id="page-barbers">
+        <div class="page-header">
+          <h1>Barber Management</h1>
+          <div class="page-actions">
+            <button class="btn-gold" onclick="openAddBarberModal()">+ Add Barber</button>
+          </div>
+        </div>
+        <div class="barber-status-bar">
+          <div class="b-stat available"><span id="b-available">0</span> Available</div>
+          <div class="b-stat busy"><span id="b-busy">0</span> Busy</div>
+          <div class="b-stat break"><span id="b-break">0</span> On Break</div>
+          <div class="b-stat offline"><span id="b-offline">0</span> Offline</div>
+        </div>
+        <div class="barbers-grid" id="barbers-grid"></div>
+      </div>
+
+      <!-- BILLING -->
+      <div class="page hidden" id="page-billing">
+        <div class="page-header">
+          <h1>Billing & Payment</h1>
+          <div class="page-actions">
+            <button class="btn-gold" onclick="openNewBillModal()">+ New Bill</button>
+          </div>
+        </div>
+        <div id="billing-select-customer" class="billing-landing">
+          <div class="billing-icon">◎</div>
+          <p>Select a customer from the queue or barber panel to generate a bill</p>
+          <button class="btn-gold" onclick="openNewBillModal()">Create New Bill</button>
+        </div>
+        <div id="billing-form" class="hidden"></div>
+        <div class="section-card" style="margin-top:2rem">
+          <div class="section-header"><h2>Recent Invoices</h2></div>
+          <div id="recent-invoices" class="invoice-list"></div>
+        </div>
+      </div>
+
+      <!-- CRM -->
+      <div class="page hidden" id="page-crm">
+        <div class="page-header">
+          <h1>Customer CRM</h1>
+          <div class="page-actions">
+            <input type="text" class="search-input" placeholder="Search by name or phone..." id="crm-search" oninput="filterCRM()">
+          </div>
+        </div>
+        <div class="crm-summary">
+          <div class="crm-stat"><span id="crm-total-c">0</span><label>Total Customers</label></div>
+          <div class="crm-stat gold"><span id="crm-vip-c">0</span><label>VIP Members</label></div>
+          <div class="crm-stat"><span id="crm-lifetime">₹0</span><label>Lifetime Revenue</label></div>
+        </div>
+        <div class="crm-table-wrap">
+          <table class="luxury-table" id="crm-table">
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Phone</th>
+                <th>Visits</th>
+                <th>Lifetime Spend</th>
+                <th>Last Visit</th>
+                <th>Membership</th>
+                <th>Fav Barber</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="crm-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- APPOINTMENTS -->
+      <div class="page hidden" id="page-appointments">
+        <div class="page-header">
+          <h1>Appointments</h1>
+          <div class="page-actions">
+            <button class="btn-gold" onclick="openAppointmentModal()">+ Book Appointment</button>
+          </div>
+        </div>
+        <div class="appt-tabs">
+          <button class="tab-btn active" onclick="filterAppts('today')">Today</button>
+          <button class="tab-btn" onclick="filterAppts('upcoming')">Upcoming</button>
+          <button class="tab-btn" onclick="filterAppts('all')">All</button>
+        </div>
+        <div class="appointments-list" id="appointments-list"></div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div class="page hidden" id="page-analytics">
+        <div class="page-header">
+          <h1>Analytics & Reports</h1>
+          <div class="page-actions">
+            <select id="analytics-period" onchange="renderAnalytics()">
+              <option value="daily">Daily</option>
+              <option value="weekly" selected>Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
+            </select>
+          </div>
+        </div>
+        <div class="analytics-grid">
+          <div class="section-card span-2">
+            <div class="section-header"><h2>Revenue Trend</h2></div>
+            <canvas id="revenue-chart" width="800" height="300"></canvas>
+          </div>
+          <div class="section-card">
+            <div class="section-header"><h2>Customer Trend</h2></div>
+            <canvas id="customer-chart" width="400" height="250"></canvas>
+          </div>
+          <div class="section-card">
+            <div class="section-header"><h2>Service Popularity</h2></div>
+            <div id="service-popularity-list" class="top-list"></div>
+          </div>
+          <div class="section-card span-2">
+            <div class="section-header"><h2>Barber Performance Leaderboard</h2></div>
+            <div id="barber-leaderboard" class="leaderboard"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INVENTORY -->
+      <div class="page hidden" id="page-inventory">
+        <div class="page-header">
+          <h1>Inventory Management</h1>
+          <div class="page-actions">
+            <button class="btn-gold" onclick="openAddInventoryModal()">+ Add Item</button>
+          </div>
+        </div>
+        <div class="inventory-alerts" id="inventory-alerts"></div>
+        <div class="crm-table-wrap">
+          <table class="luxury-table">
+            <thead>
+              <tr><th>Product</th><th>Category</th><th>Stock</th><th>Min Stock</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="inventory-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- EXPENSES -->
+      <div class="page hidden" id="page-expenses">
+        <div class="page-header">
+          <h1>Expense Management</h1>
+          <div class="page-actions">
+            <button class="btn-gold" onclick="openAddExpenseModal()">+ Add Expense</button>
+          </div>
+        </div>
+        <div class="expense-summary">
+          <div class="exp-stat gold"><span id="exp-revenue">₹0</span><label>Revenue</label></div>
+          <div class="exp-stat red"><span id="exp-total">₹0</span><label>Total Expenses</label></div>
+          <div class="exp-stat green"><span id="exp-profit">₹0</span><label>Net Profit</label></div>
+        </div>
+        <div class="crm-table-wrap">
+          <table class="luxury-table">
+            <thead>
+              <tr><th>Category</th><th>Description</th><th>Amount</th><th>Date</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="expense-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- EMPLOYEES -->
+      <div class="page hidden" id="page-employees">
+        <div class="page-header">
+          <h1>Employee Management</h1>
+          <div class="page-actions">
+            <button class="btn-gold" onclick="openAddEmployeeModal()">+ Add Employee</button>
+          </div>
+        </div>
+        <div class="employees-grid" id="employees-grid"></div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="page hidden" id="page-settings">
+        <div class="page-header"><h1>Salon Settings</h1></div>
+        <div class="settings-grid">
+          <div class="section-card">
+            <div class="section-header"><h2>Salon Information</h2></div>
+            <div class="settings-form">
+              <div class="form-group">
+                <label>Salon Name</label>
+                <input type="text" id="set-name" class="form-input">
+              </div>
+              <div class="form-group">
+                <label>Address</label>
+                <textarea id="set-address" class="form-input" rows="2"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Phone</label>
+                <input type="text" id="set-phone" class="form-input">
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="set-email" class="form-input">
+              </div>
+              <div class="form-group">
+                <label>GST Number</label>
+                <input type="text" id="set-gst" class="form-input">
+              </div>
+              <div class="form-group">
+                <label>Opening Hours</label>
+                <input type="text" id="set-hours" class="form-input" placeholder="9:00 AM - 9:00 PM">
+              </div>
+              <button class="btn-gold" onclick="saveSettings()">Save Settings</button>
+            </div>
+          </div>
+          <div class="section-card">
+            <div class="section-header"><h2>Billing Settings</h2></div>
+            <div class="settings-form">
+              <div class="form-group">
+                <label>GST Rate (%)</label>
+                <input type="number" id="set-gst-rate" class="form-input" value="18">
+              </div>
+              <div class="form-group toggle-group">
+                <label>Enable GST by Default</label>
+                <label class="toggle"><input type="checkbox" id="set-gst-default"><span class="toggle-slider"></span></label>
+              </div>
+              <div class="form-group">
+                <label>Currency Symbol</label>
+                <input type="text" id="set-currency" class="form-input" value="₹">
+              </div>
+              <button class="btn-gold" onclick="saveSettings()">Save Settings</button>
+            </div>
+          </div>
+
+          <!-- Notification Settings — full width -->
+          <div class="section-card notif-settings-card">
+            <div class="section-header">
+              <h2>📲 WhatsApp & SMS Notifications</h2>
+              <div style="display:flex;align-items:center;gap:0.75rem">
+                <label style="font-size:0.78rem;color:var(--white-dim)">Auto-notify on assign</label>
+                <label class="toggle"><input type="checkbox" id="set-auto-notify"><span class="toggle-slider"></span></label>
+              </div>
+            </div>
+            <div class="settings-form">
+              <div class="notif-placeholders">
+                <span class="ph-tag">{name}</span> Customer Name &nbsp;•&nbsp;
+                <span class="ph-tag">{token}</span> Token Number &nbsp;•&nbsp;
+                <span class="ph-tag">{barber}</span> Barber Name &nbsp;•&nbsp;
+                <span class="ph-tag">{chair}</span> Chair &nbsp;•&nbsp;
+                <span class="ph-tag">{salon}</span> Salon Name
+              </div>
+              <div class="form-group">
+                <label>WhatsApp / SMS Message Template</label>
+                <textarea id="set-notif-template" class="form-input notif-template-input" rows="5" placeholder="Message template..."></textarea>
+              </div>
+              <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center">
+                <button class="btn-gold" onclick="saveSettings()">Save Settings</button>
+                <button class="btn-outline" onclick="resetNotifTemplate()">↺ Reset to Default</button>
+              </div>
+
+              <!-- Notification Log -->
+              <div class="notif-log-section">
+                <div class="notif-log-header">
+                  <span>Recent Notifications Sent</span>
+                  <button class="btn-sm" onclick="clearNotifLog()">Clear</button>
+                </div>
+                <div id="notif-log-list" class="notif-log-list"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BACKUP -->
+      <div class="page hidden" id="page-backup">
+        <div class="page-header"><h1>Backup & Restore</h1></div>
+        <div class="backup-grid">
+          <div class="section-card">
+            <div class="section-header"><h2>Export Data</h2></div>
+            <p class="section-desc">Download a complete backup of all salon data in JSON format.</p>
+            <button class="btn-gold" onclick="exportData()">⬇ Export JSON Backup</button>
+          </div>
+          <div class="section-card">
+            <div class="section-header"><h2>Import Data</h2></div>
+            <p class="section-desc">Restore from a previously exported backup file.</p>
+            <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+            <button class="btn-outline" onclick="document.getElementById('import-file').click()">⬆ Import Backup</button>
+          </div>
+          <div class="section-card danger-zone">
+            <div class="section-header"><h2>Reset System</h2></div>
+            <p class="section-desc">This will permanently delete ALL data. This action cannot be undone.</p>
+            <button class="btn-danger" onclick="resetSystem()">⚠ Reset All Data</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end page-content -->
+  </main>
+
+  <!-- ===================== MODALS ===================== -->
+
+  <!-- Add Customer Modal -->
+  <div class="modal-overlay hidden" id="modal-add-customer">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>New Customer Token</h2>
+        <button class="modal-close" onclick="closeModal('modal-add-customer')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Customer Name *</label>
+          <input type="text" id="new-cust-name" class="form-input" placeholder="Enter name">
+        </div>
+        <div class="form-group">
+          <label>Phone Number *</label>
+          <input type="tel" id="new-cust-phone" class="form-input" placeholder="+91 XXXXX XXXXX" oninput="detectReturningCustomer(this.value)">
+          <div id="returning-customer-info" class="returning-info hidden"></div>
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <input type="text" id="new-cust-notes" class="form-input" placeholder="Special requests...">
+        </div>
+        <div class="form-group">
+          <label>Customer Type</label>
+          <select id="new-cust-type" class="form-input">
+            <option value="walkin">Walk-in</option>
+            <option value="returning">Returning</option>
+            <option value="vip">VIP</option>
+          </select>
+        </div>
+        <div class="form-group" id="barber-select-group">
+          <label>Preferred Barber (optional)</label>
+          <select id="new-cust-barber" class="form-input">
+            <option value="">Auto-assign</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="closeModal('modal-add-customer')">Cancel</button>
+        <button class="btn-gold" onclick="addCustomerToQueue()">Generate Token</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Barber Modal -->
+  <div class="modal-overlay hidden" id="modal-add-barber">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Add New Barber</h2>
+        <button class="modal-close" onclick="closeModal('modal-add-barber')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="barber-name" class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Chair Number *</label>
+            <input type="text" id="barber-chair" class="form-input" placeholder="e.g. Chair 1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Experience (years)</label>
+            <input type="number" id="barber-exp" class="form-input" min="0">
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="barber-status" class="form-input">
+              <option value="available">Available</option>
+              <option value="offline">Offline</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Specialization</label>
+          <input type="text" id="barber-spec" class="form-input" placeholder="e.g. Hair Cut, Beard, Color">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="closeModal('modal-add-barber')">Cancel</button>
+        <button class="btn-gold" onclick="addBarber()">Add Barber</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Billing Modal -->
+  <div class="modal-overlay hidden" id="modal-billing">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h2>Generate Bill</h2>
+        <button class="modal-close" onclick="closeModal('modal-billing')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="bill-customer-info" id="bill-customer-info"></div>
+        <div class="services-section">
+          <div class="section-header">
+            <h3>Services</h3>
+            <button class="btn-sm" onclick="addServiceLine()">+ Add Service</button>
+          </div>
+          <div id="service-lines"></div>
+        </div>
+        <div class="bill-extras">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Discount %</label>
+              <input type="number" id="bill-disc-pct" class="form-input" min="0" max="100" value="0" oninput="calcBillTotal()">
+            </div>
+            <div class="form-group">
+              <label>Flat Discount ₹</label>
+              <input type="number" id="bill-disc-flat" class="form-input" min="0" value="0" oninput="calcBillTotal()">
+            </div>
+            <div class="form-group">
+              <label>Tips ₹</label>
+              <input type="number" id="bill-tips" class="form-input" min="0" value="0" oninput="calcBillTotal()">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Coupon Code</label>
+              <div class="coupon-row">
+                <input type="text" id="bill-coupon" class="form-input" placeholder="Enter coupon">
+                <button class="btn-sm" onclick="applyCoupon()">Apply</button>
+              </div>
+            </div>
+            <div class="form-group toggle-group">
+              <label>Apply GST (18%)</label>
+              <label class="toggle"><input type="checkbox" id="bill-gst" onchange="calcBillTotal()"><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+        </div>
+        <div class="bill-summary">
+          <div class="bill-row"><span>Subtotal</span><span id="bill-subtotal">₹0</span></div>
+          <div class="bill-row"><span>Discount</span><span id="bill-discount-show" class="red-text">-₹0</span></div>
+          <div class="bill-row" id="gst-row" style="display:none"><span>GST (18%)</span><span id="bill-gst-show">₹0</span></div>
+          <div class="bill-row"><span>Tips</span><span id="bill-tips-show">₹0</span></div>
+          <div class="bill-row total"><span>TOTAL</span><span id="bill-total" class="gold-text">₹0</span></div>
+        </div>
+        <div class="payment-methods">
+          <h3>Payment Method</h3>
+          <div class="payment-grid">
+            <button class="pay-btn" onclick="selectPayment('cash')">💵 Cash</button>
+            <button class="pay-btn" onclick="selectPayment('upi')">📱 UPI</button>
+            <button class="pay-btn" onclick="selectPayment('card')">💳 Card</button>
+            <button class="pay-btn" onclick="selectPayment('wallet')">👛 Wallet</button>
+            <button class="pay-btn" onclick="selectPayment('split')">↔ Split</button>
+          </div>
+          <div id="split-payment-detail" class="hidden">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Cash Amount</label>
+                <input type="number" id="split-cash" class="form-input" value="0">
+              </div>
+              <div class="form-group">
+                <label>UPI Amount</label>
+                <input type="number" id="split-upi" class="form-input" value="0">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="closeModal('modal-billing')">Cancel</button>
+        <button class="btn-outline" onclick="printReceipt()">🖨 Preview Receipt</button>
+        <button class="btn-gold" onclick="completePayment()">Complete Payment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Appointment Modal -->
+  <div class="modal-overlay hidden" id="modal-appointment">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Book Appointment</h2>
+        <button class="modal-close" onclick="closeModal('modal-appointment')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Customer Name *</label>
+          <input type="text" id="appt-name" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Phone *</label>
+          <input type="tel" id="appt-phone" class="form-input">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date *</label>
+            <input type="date" id="appt-date" class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Time *</label>
+            <input type="time" id="appt-time" class="form-input">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Barber</label>
+          <select id="appt-barber" class="form-input"></select>
+        </div>
+        <div class="form-group">
+          <label>Services</label>
+          <input type="text" id="appt-services" class="form-input" placeholder="e.g. Haircut, Beard Trim">
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea id="appt-notes" class="form-input" rows="2"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="closeModal('modal-appointment')">Cancel</button>
+        <button class="btn-gold" onclick="bookAppointment()">Book Appointment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inventory Modal -->
+  <div class="modal-overlay hidden" id="modal-inventory">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Add Inventory Item</h2>
+        <button class="modal-close" onclick="closeModal('modal-inventory')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Product Name *</label>
+          <input type="text" id="inv-name" class="form-input">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category</label>
+            <select id="inv-cat" class="form-input">
+              <option>Shampoo</option>
+              <option>Wax</option>
+              <option>Gel</option>
+              <option>Cream</option>
+              <option>Facial Products</option>
+              <option>Color Products</option>
+              <option>Tools</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Stock Qty</label>
+            <input type="number" id="inv-stock" class="form-input" min="0">
+          </div>
+          <div class="form-group">
+            <label>Min Stock</label>
+            <input type="number" id="inv-min" class="form-input" min="0" value="5">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="closeModal('modal-inventory')">Cancel</button>
+        <button class="btn-gold" onclick="addInventoryItem()">Add Item</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Expense Modal -->
+  <div class="modal-overlay hidden" id="modal-expense">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Add Expense</h2>
+        <button class="modal-close" onclick="closeModal('modal-expense')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Category</label>
+          <select id="exp-cat" class="form-input">
+            <option>Rent</option>
+            <option>Electricity</option>
+            <option>Salary</option>
+            <option>Products</option>
+            <option>Maintenance</option>
+            <option>Miscellaneous</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" id="exp-desc" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Amount ₹</label>
+          <input type="number" id="exp-amount" class="form-input" min="0">
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="exp-date" class="form-input">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="closeModal('modal-expense')">Cancel</button>
+        <button class="btn-gold" onclick="addExpense()">Add Expense</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Employee Modal -->
+  <div class="modal-overlay hidden" id="modal-employee">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Add Employee</h2>
+        <button class="modal-close" onclick="closeModal('modal-employee')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="emp-name" class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Role</label>
+            <select id="emp-role" class="form-input">
+              <option>Barber</option>
+              <option>Receptionist</option>
+              <option>Manager</option>
+              <option>Cleaner</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Salary ₹</label>
+            <input type="number" id="emp-salary" class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Commission %</label>
+            <input type="number" id="emp-commission" class="form-input" value="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" id="emp-phone" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Join Date</label>
+          <input type="date" id="emp-join" class="form-input">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="closeModal('modal-employee')">Cancel</button>
+        <button class="btn-gold" onclick="addEmployee()">Add Employee</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notify Customer Modal -->
+  <div class="modal-overlay hidden" id="modal-notify">
+    <div class="modal modal-notify-inner">
+      <div class="modal-header">
+        <h2>📲 Notify Customer</h2>
+        <button class="modal-close" onclick="closeModal('modal-notify')">✕</button>
+      </div>
+      <div class="modal-body">
+        <!-- Customer Info Strip -->
+        <div class="notify-customer-strip" id="notify-strip"></div>
+
+        <!-- Message Preview -->
+        <div class="form-group">
+          <label>Message Preview</label>
+          <textarea id="notify-message-preview" class="form-input notif-preview-textarea" rows="6" readonly></textarea>
+        </div>
+
+        <!-- Channel Buttons -->
+        <div class="notify-channels">
+          <button class="notify-btn whatsapp-btn" id="notify-wa-btn" onclick="sendViaWhatsApp()">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Send via WhatsApp
+          </button>
+          <button class="notify-btn sms-btn" onclick="sendViaSMS()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            Send via SMS
+          </button>
+          <button class="notify-btn copy-btn" onclick="copyNotifMessage()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            Copy
+          </button>
+        </div>
+
+        <!-- Phone number field (editable) -->
+        <div class="form-group" style="margin-top:0.5rem">
+          <label>Sending to</label>
+          <div class="notify-phone-row">
+            <span class="notify-phone-flag">🇮🇳 +91</span>
+            <input type="tel" id="notify-phone-input" class="form-input" placeholder="10-digit number" maxlength="10">
+          </div>
+          <div class="notify-phone-hint">Edit if the customer's number is different</div>
+        </div>
+
+        <!-- Already notified indicator -->
+        <div id="notify-already-sent" class="notify-sent-badge hidden">
+          ✓ Already notified <span id="notify-sent-time"></span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="closeModal('modal-notify')">Close</button>
+        <button class="btn-gold" onclick="markAsNotified()">✓ Mark as Notified</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer Detail Modal -->
+  <div class="modal-overlay hidden" id="modal-customer-detail">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h2>Customer Profile</h2>
+        <button class="modal-close" onclick="closeModal('modal-customer-detail')">✕</button>
+      </div>
+      <div class="modal-body" id="customer-detail-body"></div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
