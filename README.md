@@ -94,7 +94,7 @@ Active Development
 
 ### Appointment Management
 
-![Appointment](assets/screenshots/appointment.png)
+![Appointment](assets/screenshots/appointments.png)
 
 ### Barber Management
 
@@ -122,7 +122,7 @@ Active Development
 
 ### Salon Settings
 
-![Settings](assets/screenshots/salon-setting.png)
+![Settings](assets/screenshots/saloon-setting.png)
 
 ### Smart Token System
 
@@ -134,4 +134,4 @@ Active Development
 
 ### WhatsApp & SMS Integration
 
-![WhatsApp Integration](assets/screenshots/whatsapp-sms-integration.png)
+![WhatsApp Integration](assets/screenshots/whatsapp-sms.png)
